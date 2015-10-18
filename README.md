@@ -26,6 +26,18 @@ Some libraries have been added to aid in the development:
  - Retrofit 2 (http://square.github.io/retrofit/) (with okhttp) to handle the Twitter API calls
  - Stetho (http://facebook.github.io/stetho/) to aid with debugging
 
+## Setup
+To be able to run the app you need to setup a Twitter app (https://apps.twitter.com/) to get the appropriate application keys.
+
+Once the application is setup you need to get the Consumer key and Consumer secret (from https://apps.twitter.com/app/[appid]/keys) and configure gradle to use it. I did setup my private gradle.properties (in ~/.gradle/gradle.properties) file with the following keys:
+
+beak.consumerKey="YOUR KEY"
+beak.consumerSecret="YOUR SECRET"
+
+Once the keas are setup, the app they are referring to must be configured (in https://apps.twitter.com/app/[appid]/settings) with a callback URL and marking the checkbox "Allow this application to be used to Sign in with Twitter". I did setup the URL http://beak.byteabyte.net as the callback url but it should work with any other as the app is providing the url in the API calls.
+
+If the callback url is not set the OAuth flow will not work and the login process will fail.
+
 ## Future improvements
 The code has been left as expressive as possible on purpose and hence no code generation libraries have been included, which might help in the future if the application grows. Specifically a DI framework (Dagger 2) could be of benefit to remove some boilerplate code or the presentation framework in Clean Contacts which allows for more streamlined presenters.
 
