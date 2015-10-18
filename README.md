@@ -2,10 +2,10 @@
 Sample application (twitter client) using clean architecture principles.
 
 ## Features
-- Login to Twitter using Oauth 1.0. Full client implementation. Checkout the domain module (oauth package) to see how the signatures are created. Tests available in the domain module too.
+- Log in to Twitter using OAuth 1.0. Full client implementation. Checkout the domain module ("oauth" package) to see how the signatures are created. Tests available in the domain module too.
 - See the user's home timeline. Pull to refresh to reload the latest tweets. Scroll to the bottom to load older tweets.
-- See a users profile data. On a tweet in the home timeline, tap on the image or user's name.
-- Post a new tweet. Use the FAB button to show the UI to post a new update. After successfully posting it the home timeline is refreshed so that the user can see the new tweet.
+- See a user's profile data. On a tweet in the home timeline, tap on the image or user's name.
+- Post a new tweet. Use the FAB button to show the UI to post a new update. After successfully posting it, the home timeline is refreshed so that the user can see the new tweet.
 
 ## Architecture
 The app has been built using Clean Architecture concepts (https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html) borrowing a bunch of concepts and ideas from https://github.com/PaNaVTEC/Clean-Contacts (thanks Christian!).
@@ -13,10 +13,10 @@ The app has been built using Clean Architecture concepts (https://blog.8thlight.
 It is divided in three modules named domain, presentation and app.
 
  - Domain contains all the core logic for the app to achieve its features
- - Presentation contains the presentation classes to handle the UI funcions. The app is based on the Model View Presenter pattern.
- - App contains all the Android specific code to fulfill the specific functionality.
+ - Presentation contains the presentation classes to handle the UI functions. The app is based on the Model View Presenter pattern.
+ - App contains all the Android specific code to fulfil the specific functionality.
  
-Domain and presentation are pure java code with no Android dependencies at all.
+The domain and presentation modules are built using pure java code with no Android dependencies at all.
 
 ## Libraries
 Some libraries have been added to aid in the development:
@@ -34,7 +34,7 @@ Once the application is setup you need to get the Consumer key and Consumer secr
 beak.consumerKey="YOUR KEY"
 beak.consumerSecret="YOUR SECRET"
 
-Once the keas are setup, the app they are referring to must be configured (in https://apps.twitter.com/app/[appid]/settings) with a callback URL and marking the checkbox "Allow this application to be used to Sign in with Twitter". I did setup the URL http://beak.byteabyte.net as the callback url but it should work with any other as the app is providing the url in the API calls.
+Once the keys are setup, the app they are referring to must be configured (in https://apps.twitter.com/app/[appid]/settings) with a callback URL and marking the checkbox "Allow this application to be used to Sign in with Twitter". I did setup the URL http://beak.byteabyte.net as the callback url but it should work with any other as the app is providing the url in the API calls.
 
 If the callback url is not set the OAuth flow will not work and the login process will fail.
 
