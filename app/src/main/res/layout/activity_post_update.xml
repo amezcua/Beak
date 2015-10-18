@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+  <android.support.design.widget.AppBarLayout
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:theme="@style/AppTheme.AppBarOverlay">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:transitionName="@string/transition_toolbar"
+        app:popupTheme="@style/AppTheme.PopupOverlay"/>
+  </android.support.design.widget.AppBarLayout>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:layout_margin="@dimen/activity_horizontal_margin"
+      >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/status"
+        android:textSize="18sp"
+        />
+    <EditText
+        android:id="@+id/new_status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="140"
+        android:hint="@string/status_help"
+        >
+      <requestFocus/>
+    </EditText>
+    <Button
+        android:layout_width="match_parent"
+        android:id="@+id/post_status_button"
+        android:layout_height="wrap_content"
+        android:text="@string/post_status_button"
+        />
+  </LinearLayout>
+</LinearLayout>

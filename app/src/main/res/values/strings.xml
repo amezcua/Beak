@@ -1,0 +1,21 @@
+<resources>
+  <string name="app_name">Beak</string>
+  <string name="action_settings">Settings</string>
+  <string name="login">Login</string>
+  <string name="login_error">There was an error logging in. Please try again.</string>
+  <string name="new_tweets">new tweets.</string>
+
+  <string name="transition_toolbar">transition:toolbar</string>
+  <string name="transition_user_image">transition:image</string>
+  <string name="transition_user_name">transition:username</string>
+  <string name="transition_user_screen_name">transition:screenname</string>
+  <string name="followers">followers.</string>
+  <string name="tweets">tweets.</string>
+  <string name="from">From:</string>
+  <string name="status">Status:</string>
+  <string name="status_help">Type your status update</string>
+  <string name="status_update">Status update</string>
+  <string name="status_text_error">Please type a new status text. Must be shorter that 140 characters.</string>
+  <string name="post_status_button">Post status</string>
+  <string name="status_text_posted">Status posted.</string>
+</resources>

@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "22.0.1"
+
+  defaultConfig {
+    applicationId "net.byteabyte.beak"
+    minSdkVersion 16
+    targetSdkVersion 23
+    versionCode 1
+    versionName "1.0"
+  }
+  buildTypes {
+    debug{
+      buildConfigField "String", "twitterConsumerKey", project.property("beak.consumerKey")
+      buildConfigField "String", "twitterConsumerSecret", project.property("beak.consumerSecret")
+
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+
+    release {
+      buildConfigField "String", "twitterConsumerKey", project.property("beak.consumerKey")
+      buildConfigField "String", "twitterConsumerSecret", project.property("beak.consumerSecret")
+
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+
+  testCompile rootProject.ext.testDependencies.mockito
+  testCompile rootProject.ext.testDependencies.junit
+
+  compile project(':presentation')
+  compile project(':domain')
+
+  compile rootProject.ext.dependencies.appcompat
+  compile rootProject.ext.dependencies.butterKnife
+  compile rootProject.ext.dependencies.design
+  compile rootProject.ext.dependencies.glide
+  compile rootProject.ext.dependencies.okhttp
+  compile rootProject.ext.dependencies.recyclerView
+  compile rootProject.ext.dependencies.retrofit
+  compile rootProject.ext.dependencies.retrofitgson
+  compile rootProject.ext.dependencies.stetho
+  compile rootProject.ext.dependencies.stethookhttp
+}

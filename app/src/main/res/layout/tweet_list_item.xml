@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/activity_vertical_margin"
+    >
+
+    <ImageView
+        android:id="@+id/user_image"
+        android:layout_width="@dimen/list_item_image_width"
+        android:layout_height="@dimen/list_item_image_height"
+        android:layout_marginRight="@dimen/list_item_image_margin"
+        android:layout_marginEnd="@dimen/list_item_image_margin"
+        tools:src="@drawable/user_placeholder"
+        android:transitionName="@string/transition_user_image"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/user_image"
+        android:layout_toEndOf="@+id/user_image"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/title_margin">
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/title_margin"
+                android:layout_marginEnd="@dimen/title_margin"
+                android:layout_centerVertical="true"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:transitionName="@string/transition_user_name"
+                tools:text="User name"
+                />
+            <TextView
+                android:id="@+id/user_display_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightGray"
+                android:layout_centerVertical="true"
+                android:textSize="12sp"
+                android:layout_toRightOf="@id/user_name"
+                android:transitionName="@string/transition_user_screen_name"
+                tools:text="\@user"
+                />
+
+            <TextView
+                android:id="@+id/tweetDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:textColor="@color/lightGray"
+                tools:text="1d"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tweetText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="This is the tweet's text"
+            />
+
+
+    </LinearLayout>
+
+</RelativeLayout>
