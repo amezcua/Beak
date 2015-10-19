@@ -33,8 +33,10 @@ To be able to run the app you need to setup a Twitter app (https://apps.twitter.
 
 Once the application is setup you need to get the Consumer key and Consumer secret (from https://apps.twitter.com/app/[appid]/keys) and configure gradle to use it. I did setup my private gradle.properties (in ~/.gradle/gradle.properties) file with the following keys:
 
+```
 beak.consumerKey="YOUR KEY"
 beak.consumerSecret="YOUR SECRET"
+```
 
 Once the keys are setup, the app they are referring to must be configured (in https://apps.twitter.com/app/[appid]/settings) with a callback URL and marking the checkbox "Allow this application to be used to Sign in with Twitter". I did setup the URL http://beak.byteabyte.net as the callback url but it should work with any other as the app is providing the url in the API calls.
 
