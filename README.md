@@ -7,6 +7,8 @@ Sample application (twitter client) using clean architecture principles.
 - See a user's profile data. On a tweet in the home timeline, tap on the image or user's name.
 - Post a new tweet. Use the FAB button to show the UI to post a new update. After successfully posting it, the home timeline is refreshed so that the user can see the new tweet.
 
+![alt tag](https://raw.githubusercontent.com/amezcua/amezcua.github.io/master/projects/Beak/images/beak.gif)
+
 ## Architecture
 The app has been built using Clean Architecture concepts (https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html) borrowing a bunch of concepts and ideas from https://github.com/PaNaVTEC/Clean-Contacts (thanks Christian!).
 
