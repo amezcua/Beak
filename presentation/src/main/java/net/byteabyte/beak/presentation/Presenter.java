@@ -1,5 +1,10 @@
 package net.byteabyte.beak.presentation;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
+
 public abstract class Presenter<V> {
 
   private OutputThread outputThread;
@@ -14,7 +19,7 @@ public abstract class Presenter<V> {
   }
 
   public void detachView(){
-    view = null;
+    view = createEmptyView(view);
   }
 
   public V getView() {
@@ -27,5 +32,16 @@ public abstract class Presenter<V> {
 
   public OutputThread getOutputThread() {
     return outputThread;
+  }
+
+  @SuppressWarnings("unchecked")
+  private V createEmptyView(Object realObject) {
+    Class<V> cls = (Class<V>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+
+    return (V) Proxy.newProxyInstance(realObject.getClass().getClassLoader(), new Class[]{ cls }, new InvocationHandler() {
+      @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        return null;
+      }
+    });
   }
 }

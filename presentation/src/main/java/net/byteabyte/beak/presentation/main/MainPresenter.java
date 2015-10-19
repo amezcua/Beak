@@ -46,9 +46,6 @@ public class MainPresenter extends Presenter<MainView> {
   }
 
   public void onResume() {
-    if(getView() == null) return;
-
-
     if(StringUtils.isNullOrEmpty(oauthToken)){
       getView().showAnonymousView();
       getView().hidePostStatusUpdateButton();
@@ -126,8 +123,6 @@ public class MainPresenter extends Presenter<MainView> {
     }
 
     @Override public void run() {
-      if(getView() == null) return;
-
       getView().hideLogin();
       getView().hideLoading();
       getView().displayTimeline(timeline, clearCurrent);
@@ -143,8 +138,6 @@ public class MainPresenter extends Presenter<MainView> {
     }
 
     @Override public void run() {
-      if(getView() == null) return;
-
       getView().hideLoading();
       getView().displayNewTimelineInformation(this.timeline.size());
     }
@@ -152,8 +145,6 @@ public class MainPresenter extends Presenter<MainView> {
 
   private class OnGetTimelineError implements Runnable{
     @Override public void run() {
-      if(getView() == null) return;
-
       getView().hideLoading();
       getView().displayTimelineLoadError();
     }

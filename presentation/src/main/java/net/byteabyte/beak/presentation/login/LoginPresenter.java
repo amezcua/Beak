@@ -82,8 +82,6 @@ public class LoginPresenter extends Presenter<LoginView> {
     }
 
     @Override public void run() {
-      if(getView() == null) return;
-
       getView().hideLoading();
       getView().showLoginPage(this.token);
     }
@@ -91,8 +89,6 @@ public class LoginPresenter extends Presenter<LoginView> {
 
   private class OnGetLoginRequestTokenError implements Runnable{
     @Override public void run() {
-      if(getView() == null) return;
-
       getView().onRetrieveLoginTokenError();
     }
   }
@@ -108,16 +104,12 @@ public class LoginPresenter extends Presenter<LoginView> {
     }
 
     @Override public void run() {
-      if(getView() == null) return;
-
       getView().onLoginVerificationComplete(oauthToken, oauthSecret);
     }
   }
 
   private class OnVerifyTokenError implements Runnable{
     @Override public void run() {
-      if(getView() == null) return;
-
       getView().onVerifyTokenError();
     }
   }

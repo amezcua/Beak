@@ -49,16 +49,12 @@ public class PostUpdatePresenter extends Presenter<PostUpdateView> {
     }
 
     @Override public void run() {
-      if(getView() == null) return;
-
       getView().onStatusPosted();
     }
   }
 
   private class OnPostUpdateError implements Runnable{
     @Override public void run() {
-      if(getView() == null) return;
-
       getView().onStatusEmptyError();
     }
   }
