@@ -39,9 +39,10 @@ Once the keys are setup, the app they are referring to must be configured (in ht
 If the callback url is not set the OAuth flow will not work and the login process will fail.
 
 ## Future improvements
-The code has been left as expressive as possible on purpose and hence no code generation libraries have been included, which might help in the future if the application grows. Specifically a DI framework (Dagger 2) could be of benefit to remove some boilerplate code or the presentation framework in Clean Contacts which allows for more streamlined presenters.
+- The code has been left as expressive as possible on purpose and hence no code generation libraries have been included, which might help in the future if the application grows. Specifically a DI framework (Dagger 2) could be of benefit to remove some boilerplate code or the presentation framework in Clean Contacts which allows for more streamlined presenters.
+- Only simple threading is used in the presenters, opening a new thread whenever a network operation has to be performed which is then passed to the UI thread according to the mechanism specified by the calling activity.
+- Caching of the timelines would improve app startup to get the gome timeline so the use of a repository would be beneficial in this case; going to the network to retrieve the timeline only for new data.
 
-Only simple threading is used in the presenters, opening a new thread whenever a network operation has to be performed which is then passed to the UI thread according to the mechanism specified by the calling activity.
 
 
 
