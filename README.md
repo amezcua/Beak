@@ -1,13 +1,25 @@
-# Beak
+# Beak v2
 Sample application (twitter client) using clean architecture principles.
 
+Use the Tags of the repository to access the different published versions.
+
 ## Features
-- Log in to Twitter using OAuth 1.0. Full client implementation. Checkout the domain module ("oauth" package) to see how the signatures are created. Tests available in the domain module too.
-- See the user's home timeline. Pull to refresh to reload the latest tweets. Scroll to the bottom to load older tweets.
-- See a user's profile data. On a tweet in the home timeline, tap on the image or user's name.
-- Post a new tweet. Use the FAB button to show the UI to post a new update. After successfully posting it, the home timeline is refreshed so that the user can see the new tweet.
+ - Log in to Twitter using OAuth 1.0. Full client implementation. Checkout the domain module ("oauth" package) to see how the signatures are created. Tests available in the domain module too.
+ - See the user's home timeline. Pull to refresh to reload the latest tweets. Scroll to the bottom to load older tweets.
+ - See a user's profile data. On a tweet in the home timeline, tap on the image or user's name.
+ - Post a new tweet. Use the FAB button to show the UI to post a new update. After successfully posting it, the home timeline is refreshed so that the user can see the new tweet.
 
 ![alt tag](https://raw.githubusercontent.com/amezcua/amezcua.github.io/master/projects/Beak/images/beak.gif)
+
+## What's new in v2?
+The presentation layer has been modified to hide all the threading code. The goal is to write the presentation code as sequential code and not have to worry about threading at all.
+
+To achieve this two techniques are used, dynamic java proxies and aspects.
+
+ - *Dynamic proxies*. When a view is attached to a presenter a dynamic proxy wrapping the view is created. Then when the *getView()* method is called, the proxy is returned transparently to the caller, which will call the view methods using the provided *OutputThread* implementation. In the sample an Android handler will be invoked. When the *detachView* method is called, a null proxy view is created replacing the original one so there is no need to do null checks in the case that background operations complete after the view has disappeared.
+ - Aspects. Aspectj has been included in the presentation module and the *@BackgroundTask* decorator has been defined. If a method requires a long running task that should be run in a separate thread, the decorator can be applied to the method and the relevant aspect will take care of spawning a new background thread to run that method.
+
+Combining the two methods allows for writing sequential-like code that hides the complexity of handling threads that the previous version had.
 
 ## Architecture
 The app has been built using Clean Architecture concepts (https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html) borrowing a bunch of concepts and ideas from https://github.com/PaNaVTEC/Clean-Contacts (thanks Christian!).
@@ -22,10 +34,11 @@ The domain and presentation modules are built using pure java code with no Andro
 
 ## Libraries
 Some libraries have been added to aid in the development:
- - Goole appcompat and design libraries (to aid with material design concepts such as the FAB and activity transitions)
+
+ - Google appcompat and design libraries (to aid with material design concepts such as the FAB and activity transitions)
  - Butterknife (http://jakewharton.github.io/butterknife/) to help with UI elements binding
  - Glide (https://github.com/bumptech/glide) to easily display images
- - Retrofit 2 (http://square.github.io/retrofit/) (with okhttp) to handle the Twitter API calls
+ - Retrofit 2 (http://square.github.io/retrofit/) (with OkHttp) to handle the Twitter API calls
  - Stetho (http://facebook.github.io/stetho/) to aid with debugging
 
 ## Setup
@@ -43,10 +56,5 @@ Once the keys are setup, the app they are referring to must be configured (in ht
 If the callback url is not set the OAuth flow will not work and the login process will fail.
 
 ## Future improvements
-- The code has been left as expressive as possible on purpose and hence no code generation libraries have been included, which might help in the future if the application grows. Specifically a DI framework (Dagger 2) could be of benefit to remove some boilerplate code or the presentation framework in Clean Contacts which allows for more streamlined presenters.
-- Only simple threading is used in the presenters, opening a new thread whenever a network operation has to be performed which is then passed to the UI thread according to the mechanism specified by the calling activity.
-- Caching of the timelines would improve app startup to get the gome timeline so the use of a repository would be beneficial in this case; going to the network to retrieve the timeline only for new data.
-
-
-
-
+- Caching of the timelines (and oauth related data) would improve app startup so the use of a repository would be beneficial in this case; going to the network to retrieve the timeline only for new data.
+- Displaying a small specific user timeline in the user details screen would give that screen more reason for being there as right now it displays only very basic information. It would be a good opportunity to play with the design.
