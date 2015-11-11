@@ -5,7 +5,7 @@ import net.byteabyte.beak.domain.post_update.PostUpdateAction;
 import net.byteabyte.beak.domain.post_update.PostUpdateClient;
 import net.byteabyte.beak.domain.post_update.PostUpdateInput;
 import net.byteabyte.beak.domain.post_update.PostUpdateResponse;
-import net.byteabyte.beak.presentation.OutputThread;
+import net.byteabyte.beak.presentation.common.OutputThread;
 import net.byteabyte.beak.presentation.post_update.PostUpdatePresenter;
 import net.byteabyte.beak.presentation.post_update.PostUpdateView;
 import org.junit.*;
@@ -25,8 +25,7 @@ public class PostUpdateActionPresentation {
       }
     }, new PostUpdateAction(new PostUpdateClient() {
       @Override public Tweet postUpdate(PostUpdateInput input) {
-        Tweet createdTweet = new Tweet();
-        createdTweet.setText(input.getStatus());
+        Tweet createdTweet = new Tweet(null, null, null, input.getStatus(), null, null);
         PostUpdateResponse response = new PostUpdateResponse(createdTweet);
         return response.getTweet();
       }

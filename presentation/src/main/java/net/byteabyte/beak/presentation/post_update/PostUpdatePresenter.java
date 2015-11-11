@@ -28,8 +28,7 @@ public class PostUpdatePresenter extends Presenter<PostUpdateView> {
   public void postStatusUpdate(final String statusUpdate) {
       try {
         PostUpdateInput input = new PostUpdateInput(consumerKey, consumerSecret, oauthToken, oauthSecret, statusUpdate);
-        action.setRequestData(input);
-        action.call();
+        action.call(input);
         getView().onStatusPosted();
       } catch (PostUpdateException e) {
         getView().onStatusEmptyError();

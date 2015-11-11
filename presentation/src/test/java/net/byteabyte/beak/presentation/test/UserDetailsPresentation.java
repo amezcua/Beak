@@ -1,7 +1,7 @@
 package net.byteabyte.beak.presentation.test;
 
 import net.byteabyte.beak.domain.models.User;
-import net.byteabyte.beak.presentation.OutputThread;
+import net.byteabyte.beak.presentation.common.OutputThread;
 import net.byteabyte.beak.presentation.user_details.UserDetailsPresenter;
 import net.byteabyte.beak.presentation.user_details.UserDetailsView;
 import org.junit.Before;
@@ -18,7 +18,8 @@ public class UserDetailsPresentation {
 
   @Before public void setup(){
 
-    user = new User();
+    user = new User(null, null, null, null, null, 0, 0,
+        false, 0, null, false);
 
     presenter = new UserDetailsPresenter(new OutputThread() {
       @Override public void execute(Runnable runnable) {

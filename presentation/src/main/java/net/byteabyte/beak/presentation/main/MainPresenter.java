@@ -87,11 +87,10 @@ public class MainPresenter extends Presenter<MainView> {
 
   @BackgroundTask
   private void loadHomeTimeline(final String maxId) {
-    GetHomeTimelineAction getHomeTimelineAction = new GetHomeTimelineAction(homeTimelineClient);
-
     try {
-      getHomeTimelineAction.setRequestData(new GetHomeTimelineInput(consumerKey, consumerSecret, oauthToken, oauthSecret, maxId));
-      GetHomeTimelineResponse response = getHomeTimelineAction.call();
+      GetHomeTimelineAction getHomeTimelineAction = new GetHomeTimelineAction(homeTimelineClient);
+
+      GetHomeTimelineResponse response = getHomeTimelineAction.call(new GetHomeTimelineInput(consumerKey, consumerSecret, oauthToken, oauthSecret, maxId));
 
       List<Tweet> newTimeline = response.getTimeline();
 

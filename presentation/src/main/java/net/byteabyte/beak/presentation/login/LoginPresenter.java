@@ -43,10 +43,9 @@ public class LoginPresenter extends Presenter<LoginView> {
 
   @BackgroundTask
   private void retrieveOauthLoginToken() {
-    getLoginRequestTokenAction.setRequestData(
-        new RequestTokenClientInput(consumerKey, consumerSecret, Twitter.REDIRECT_URL));
     try {
-      RequestTokenClientResponse loginResponse = getLoginRequestTokenAction.call();
+      RequestTokenClientResponse loginResponse =
+          getLoginRequestTokenAction.call(new RequestTokenClientInput(consumerKey, consumerSecret, Twitter.REDIRECT_URL));
       getView().hideLoading();
       getView().showLoginPage(loginResponse.buildLoginUrl());
     } catch (Exception e) {
@@ -58,10 +57,10 @@ public class LoginPresenter extends Presenter<LoginView> {
   public void onRedirectUrlReceived(final String url) {
     RedirectUrlParser.RedirectUserParseResult urlPars = new RedirectUrlParser().parse(url);
 
-    verifyTokenAction.setRequestData(new VerifyTokenClientInput(consumerKey, consumerSecret, urlPars.getOauthRequestToken(), urlPars.getOauthVerifier()));
-
     try {
-      VerifyTokenClientResponse verifyTokenClientResponse = verifyTokenAction.call();
+      VerifyTokenClientResponse verifyTokenClientResponse = verifyTokenAction.call(
+          new VerifyTokenClientInput(consumerKey, consumerSecret, urlPars.getOauthRequestToken(), urlPars.getOauthVerifier())
+      );
       getView().onLoginVerificationComplete(verifyTokenClientResponse.getOauthToken(),
           verifyTokenClientResponse.getOauthSecret());
     } catch (VerifyTokenClientException e) {
