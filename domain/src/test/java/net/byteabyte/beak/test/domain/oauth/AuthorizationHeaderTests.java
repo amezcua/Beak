@@ -59,52 +59,24 @@ public class AuthorizationHeaderTests {
     assertTrue(header.startsWith("OAuth "));
   }
 
-  @Test public void generatedHeaderContainsConsumerKey(){
-    String expectedHeaderValue = OAUTH_CONSUMER_KEY + "=\"" + consumerKey + "\"";
+  @Test public void generatedHeaderContainsRequiredFields(){
+    String expectedConsumerKey = OAUTH_CONSUMER_KEY + "=\"" + consumerKey + "\"";
+    String expectedNonce = OAUTH_NONCE + "=";
+    String expectedSignature = OAUTH_SIGNATURE + "=";
+    String expectedSignatureMethod = OAUTH_SIGNATURE_METHOD + "=\"HMAC-SHA1\"";
+    String expectedTimestamp = OAUTH_TIMESTAMP + "=";
+    String expectedOauthToken = OAUTH_TOKEN + "=\"" + oauthToken + "\"";
+    String expectedOauthVersion = OAUTH_VERSION + "=\"1.0\"";
 
-    assertTrue(header.contains(expectedHeaderValue));
-  }
+    assertEquals(9, header.split(",").length);
 
-  @Test public void generatedHeaderContainsNonce(){
-    String expectedHeaderValue = OAUTH_NONCE + "=";
-
-    assertTrue(header.contains(expectedHeaderValue));
-  }
-
-  @Test public void generatedHeaderContainsSignature(){
-    String expectedHeaderValue = OAUTH_SIGNATURE + "=";
-
-    assertTrue(header.contains(expectedHeaderValue));
-  }
-
-  @Test public void generatedHeaderContainsSignatureMethod(){
-    String expectedHeaderValue = OAUTH_SIGNATURE_METHOD + "=\"HMAC-SHA1\"";
-
-    assertTrue(header.contains(expectedHeaderValue));
-  }
-
-  @Test public void generatedHeaderContainsTimestap(){
-    String expectedHeaderValue = OAUTH_TIMESTAMP + "=";
-
-    assertTrue(header.contains(expectedHeaderValue));
-  }
-
-  @Test public void generatedHeaderContainsOauthToken(){
-    String expectedHeaderValue = OAUTH_TOKEN + "=\"" + oauthToken + "\"";
-
-    assertTrue(header.contains(expectedHeaderValue));
-  }
-
-  @Test public void generatedHeaderContainsOauthVersion(){
-    String expectedHeaderValue = OAUTH_VERSION + "=\"1.0\"";
-
-    assertTrue(header.contains(expectedHeaderValue));
-  }
-
-  @Test public void generatedHeaderHasTheRightAmountOfFields(){
-    int fieldCount = 9;
-
-    assertEquals(fieldCount, header.split(",").length);
+    assertTrue(header.contains(expectedOauthVersion));
+    assertTrue(header.contains(expectedOauthToken));
+    assertTrue(header.contains(expectedTimestamp));
+    assertTrue(header.contains(expectedSignatureMethod));
+    assertTrue(header.contains(expectedSignature));
+    assertTrue(header.contains(expectedNonce));
+    assertTrue(header.contains(expectedConsumerKey));
   }
 
   @Test public void nonceHasAValue(){
@@ -166,7 +138,7 @@ public class AuthorizationHeaderTests {
     assertFalse(header.endsWith(","));
   }
 
-  @Test public void mockNonceValuePresentInHeader()
+  @Test public void nonceValuePresentInHeader()
       throws NoSuchAlgorithmException, AuthorizationHeaderCreationException {
     String nonce = UUID.randomUUID().toString();
 
@@ -259,7 +231,7 @@ public class AuthorizationHeaderTests {
     assertEquals(percentEncode(extraKeyValue), headerFields.get(extraKey));
   }
 
-  @Test public void testSignatureWithoutOauthTokens()
+  @Test public void validSignatureWithoutOauthTokens()
       throws AuthorizationHeaderCreationException, NoSuchAlgorithmException {
     String url = "https://api.twitter.com/oauth/request_token";
     String nonce = "ff49f7c4fad5ac6e5f1013b4cb93c2b6";
