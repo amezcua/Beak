@@ -10,28 +10,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class GetLoginRequestTokenActionTest {
-  @Test(expected = RequestTokenClientException.class)
-  public void actionWithNoDataThrows() throws RequestTokenClientException {
-
-    RequestTokenClient mockRequestTokenClient = new RequestTokenClient() {
-      @Override
-      public RequestTokenClientResponse requestToken(RequestTokenClientInput requestTokenClientInput)
-          throws RequestTokenClientException {
-        if(requestTokenClientInput == null) {
-          throw new RequestTokenClientException(null);
-        }else if(requestTokenClientInput.getConsumerKey() == null || requestTokenClientInput.getConsumerSecret() == null || requestTokenClientInput.getRedirectUrl() == null){
-          throw new RequestTokenClientException(null);
-        }else{
-          return new RequestTokenClientResponse(null, null, false);
-        }
-      }
-    };
-
-    GetLoginRequestTokenAction action = new GetLoginRequestTokenAction(mockRequestTokenClient);
-
-    action.call();
-  }
-
   @Test public void actionReturnsTokens() throws RequestTokenClientException {
     final RequestTokenClientResponse expectedResponse = new RequestTokenClientResponse("MOCK_TOKEN", "OAUTH_SECRET", true);
 
@@ -43,7 +21,7 @@ public class GetLoginRequestTokenActionTest {
       }
     };
 
-    RequestTokenClientResponse actualResponse = new GetLoginRequestTokenAction(mockRequestTokenClient).call();
+    RequestTokenClientResponse actualResponse = new GetLoginRequestTokenAction(mockRequestTokenClient).call(null);
 
     assertEquals(expectedResponse, actualResponse);
   }

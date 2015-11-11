@@ -15,7 +15,7 @@ public class PostUpdateActionTest {
   @Test(expected = PostUpdateException.class) public void postUpdateWithNullClientThrows() throws PostUpdateException{
     PostUpdateAction action = new PostUpdateAction(null);
 
-    action.call();
+    action.call(null);
   }
 
   @Test(expected = PostUpdateException.class) public void postUpdateWithoutStatusThrows()
@@ -27,7 +27,7 @@ public class PostUpdateActionTest {
       }
     });
 
-    action.call();
+    action.call(null);
   }
 
   @Test(expected = PostUpdateException.class) public void postUpdateWithTooLongStatusThrows()
@@ -44,9 +44,7 @@ public class PostUpdateActionTest {
         + "So I will repeat. "
         + "This is the status which is too long for a tweet. A tweet must be shorter that 140 characters.");
 
-    action.setRequestData(input);
-
-    action.call();
+    action.call(input);
   }
 
   @Test public void postUpdateWithValidStatusReturnsTweet() throws PostUpdateException {
@@ -61,9 +59,8 @@ public class PostUpdateActionTest {
         return response.getTweet();
       }
     });
-    action.setRequestData(input);
 
-    PostUpdateResponse response = action.call();
+    PostUpdateResponse response = action.call(input);
 
     assertEquals(status, response.getTweet().getText());
   }

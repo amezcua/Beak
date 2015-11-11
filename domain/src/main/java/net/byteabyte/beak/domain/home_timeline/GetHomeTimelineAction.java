@@ -10,22 +10,17 @@ public class GetHomeTimelineAction implements
     Action<GetHomeTimelineInput, GetHomeTimelineResponse, GetHomeTimelineException> {
 
   private GetHomeTimelineClient client;
-  private GetHomeTimelineInput input;
 
   public GetHomeTimelineAction(GetHomeTimelineClient client) {
     this.client = client;
   }
 
-  @Override public void setRequestData(GetHomeTimelineInput request) {
-    this.input = request;
-  }
+  @Override public GetHomeTimelineResponse call(GetHomeTimelineInput request) throws GetHomeTimelineException {
+    if(request == null || StringUtils.isNullOrEmpty(request.getOauthRequestToken())) throw  new GetHomeTimelineException("The input data can not be empty");
 
-  @Override public GetHomeTimelineResponse call() throws GetHomeTimelineException {
-    if(this.input == null || StringUtils.isNullOrEmpty(this.input.getOauthRequestToken())) throw  new GetHomeTimelineException("The input data can not be empty");
+    List<Tweet> getHomeTimelineResponse = client.getHomeTimeline(request);
 
-    List<Tweet> getHomeTimelineResponse = client.getHomeTimeline(this.input);
-
-    if(input.getMaxId() == null){
+    if(request.getMaxId() == null){
       return new GetHomeTimelineResponse(getHomeTimelineResponse);
     }else if(getHomeTimelineResponse.size() <= 1) {
       return new GetHomeTimelineResponse(new ArrayList<Tweet>());

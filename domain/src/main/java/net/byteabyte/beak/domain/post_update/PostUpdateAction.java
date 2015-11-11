@@ -8,17 +8,12 @@ public class PostUpdateAction implements Action<PostUpdateInput, PostUpdateRespo
 
   private static final int MAX_TWEET_LENGTH = 140;
   private final PostUpdateClient client;
-  private PostUpdateInput request;
 
   public PostUpdateAction(PostUpdateClient client){
     this.client = client;
   }
 
-  @Override public void setRequestData(PostUpdateInput request) {
-    this.request = request;
-  }
-
-  @Override public PostUpdateResponse call() throws PostUpdateException {
+  @Override public PostUpdateResponse call(PostUpdateInput request) throws PostUpdateException {
     if((request == null) || (client == null) || (StringUtils.isNullOrEmpty(request.getStatus()))) throw new PostUpdateException();
 
     if(request.getStatus().length() > MAX_TWEET_LENGTH){

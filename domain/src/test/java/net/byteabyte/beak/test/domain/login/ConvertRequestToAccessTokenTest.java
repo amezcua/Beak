@@ -44,7 +44,7 @@ public class ConvertRequestToAccessTokenTest {
 
     VerifyTokenAction action = new VerifyTokenAction(verifyTokenClient);
 
-    VerifyTokenClientResponse verifyTokenActionResponse = action.call();
+    VerifyTokenClientResponse verifyTokenActionResponse = action.call(null);
 
     assertNotNull(verifyTokenActionResponse);
     assertNotNull(verifyTokenActionResponse.getOauthToken());
@@ -59,6 +59,6 @@ public class ConvertRequestToAccessTokenTest {
 
     VerifyTokenAction action = new VerifyTokenAction(verifyTokenClient);
 
-    action.call();
+    action.call(null);
   }
 }

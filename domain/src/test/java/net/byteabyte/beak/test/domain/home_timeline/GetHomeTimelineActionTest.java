@@ -19,16 +19,14 @@ public class GetHomeTimelineActionTest {
 
     GetHomeTimelineAction action = new GetHomeTimelineAction(null);
 
-    action.call();
+    action.call(null);
   }
 
   @Test(expected = GetHomeTimelineException.class) public void actionWithInvalidInputThrows() throws GetHomeTimelineException {
     GetHomeTimelineInput input = new GetHomeTimelineInput(null, null, null, null, null);
 
     GetHomeTimelineAction action = new GetHomeTimelineAction(null);
-    action.setRequestData(input);
-
-    action.call();
+    action.call(input);
   }
 
   @Test public void firstPageReturnsFullTweetList() throws GetHomeTimelineException {
@@ -44,9 +42,7 @@ public class GetHomeTimelineActionTest {
     };
 
     GetHomeTimelineAction action = new GetHomeTimelineAction(client);
-    action.setRequestData(input);
-
-    GetHomeTimelineResponse response = action.call();
+    GetHomeTimelineResponse response = action.call(input);
 
     assertEquals(expectedResponse, response.getTimeline());
   }
@@ -66,9 +62,7 @@ public class GetHomeTimelineActionTest {
     };
 
     GetHomeTimelineAction action = new GetHomeTimelineAction(client);
-    action.setRequestData(input);
-
-    GetHomeTimelineResponse response = action.call();
+    GetHomeTimelineResponse response = action.call(input);
 
     assertEquals(0, response.getTimeline().size());
   }
@@ -88,9 +82,8 @@ public class GetHomeTimelineActionTest {
     };
 
     GetHomeTimelineAction action = new GetHomeTimelineAction(client);
-    action.setRequestData(input);
 
-    GetHomeTimelineResponse response = action.call();
+    GetHomeTimelineResponse response = action.call(input);
 
     assertEquals(1, response.getTimeline().size());
     assertEquals("1235", response.getTimeline().get(0).getId());
