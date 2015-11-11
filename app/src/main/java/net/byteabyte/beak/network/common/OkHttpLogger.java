@@ -42,13 +42,6 @@ class OkHttpLogger {
       Map<String, List<String>> headers = response.headers().toMultimap();
       printHeaders(tag, headers);
     }
-
-    try {
-      Log.d(tag, response.body().string());
-    } catch (IOException e) {
-      Log.e(tag, "Error reading body:");
-      Log.e(tag, e.toString());
-    }
   }
 
   private void printHeaders(String tag, Map<String, List<String>> headers){
