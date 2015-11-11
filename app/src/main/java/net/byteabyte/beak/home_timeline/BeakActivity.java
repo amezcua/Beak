@@ -51,7 +51,7 @@ public class BeakActivity extends AppCompatActivity implements MainView, SwipeRe
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    presenter = new MainPresenter(new UIThreadOutput(), new HomeTimelineClient(), BuildConfig.twitterConsumerKey, BuildConfig.twitterConsumerSecret);
+    presenter = new MainPresenter(new UIThreadOutput(), new GetHomeTimelineClientImp(), BuildConfig.twitterConsumerKey, BuildConfig.twitterConsumerSecret);
 
     setContentView(R.layout.activity_beak);
     ButterKnife.bind(this);

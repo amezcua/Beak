@@ -9,33 +9,31 @@ import net.byteabyte.beak.domain.login.request_token.RequestTokenClientException
 import net.byteabyte.beak.domain.login.request_token.RequestTokenClientInput;
 import net.byteabyte.beak.domain.login.request_token.RequestTokenClientResponse;
 import net.byteabyte.beak.domain.oauth.OauthKeys;
-import net.byteabyte.beak.network.common.OAuthHttpClient;
 import net.byteabyte.beak.network.common.OAuthClientParameters;
+import net.byteabyte.beak.network.common.OAuthRetrofitClient;
 import net.byteabyte.beak.network.common.TwitterService;
 import retrofit.Response;
-import retrofit.Retrofit;
 
-public class GetLoginTokenClient implements RequestTokenClient {
+public class RequestTokenClientImp extends OAuthRetrofitClient implements RequestTokenClient {
 
   @Override public RequestTokenClientResponse requestToken(RequestTokenClientInput requestTokenClientInput) throws RequestTokenClientException {
 
-    Map<String, String> extraParams = new HashMap<>();
-    extraParams.put(OauthKeys.OAUTH_CALLBACK.getKey(), requestTokenClientInput.getRedirectUrl());
-    OAuthClientParameters
-        params = new OAuthClientParameters(requestTokenClientInput.getConsumerKey(), requestTokenClientInput.getConsumerSecret(), extraParams);
-
-    Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("https://api.twitter.com")
-        .client(new OAuthHttpClient(params))
-        .build();
-
-    TwitterService service = retrofit.create(TwitterService.class);
-
     try {
-      return buildOutputResponse(service.getLoginRequestToken().execute());
+      Response<ResponseBody> twitterResponse = buildTwitterService(requestTokenClientInput).getLoginRequestToken().execute();
+      return buildOutputResponse(twitterResponse);
     }catch (IOException e){
       throw new RequestTokenClientException(e);
     }
+  }
+
+  private TwitterService buildTwitterService(RequestTokenClientInput requestTokenClientInput){
+    Map<String, String> extraParams = new HashMap<>();
+    extraParams.put(OauthKeys.OAUTH_CALLBACK.getKey(), requestTokenClientInput.getRedirectUrl());
+    OAuthClientParameters
+        params = new OAuthClientParameters(requestTokenClientInput.getConsumerKey(),
+        requestTokenClientInput.getConsumerSecret(), extraParams);
+
+    return buildOauthRetrofitClient(params).create(TwitterService.class);
   }
 
   private RequestTokenClientResponse buildOutputResponse(Response<ResponseBody> response)

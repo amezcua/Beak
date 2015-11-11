@@ -35,7 +35,7 @@ public class PostUpdateActivity extends BeakActivityBase implements PostUpdateVi
     String oauthSecret = getIntent().getStringExtra(EXTRA_OAUTH_SECRET);
 
     presenter = new PostUpdatePresenter(new UIThreadOutput(),
-        new PostUpdateAction(new PostStatusUpdateClient()),
+        new PostUpdateAction(new PostUpdateClientImp()),
         BuildConfig.twitterConsumerKey,
         BuildConfig.twitterConsumerSecret,
         oauthToken,

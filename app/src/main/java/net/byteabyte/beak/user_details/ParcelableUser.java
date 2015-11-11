@@ -47,21 +47,8 @@ public class ParcelableUser implements Parcelable {
   }
 
   public User createUser(){
-    User user = new User();
-
-    user.setName(this.name);
-    user.setScreenName(this.screenName);
-    user.setLocation(this.location);
-    user.setDescription(this.description);
-    user.setUrl(this.url);
-    user.setFollowersCount(this.followersCount);
-    user.setFriendsCount(this.friendsCount);
-    user.setIsVerified(this.isVerified);
-    user.setStatusesCount(this.statusesCount);
-    user.setProfileImage(this.profileImage);
-    user.setFollowing(this.following);
-
-    return user;
+    return new User(this.name, this.screenName, this.location, this.description, this.url, this.followersCount,
+        this.friendsCount, this.isVerified, this.statusesCount, this.profileImage, this.following);
   }
 
   @Override

@@ -12,36 +12,17 @@ public class NetworkMapper {
   public Tweet mapTweet(TwitterTweet networkTweet){
     if(networkTweet == null) return null;
 
-    Tweet tweet = new Tweet();
-    tweet.setId(networkTweet.id_str);
-    tweet.setCreated(networkTweet.created_at);
-    tweet.setText(networkTweet.text);
-
-    tweet.setUser(mapUser(networkTweet.user));
-    tweet.setUrls(mapUrls(networkTweet.entities.urls));
-    tweet.setMedia(mapMedia(networkTweet.entities.media));
-
-    return tweet;
+    return new Tweet(networkTweet.created_at, networkTweet.id_str,
+        mapMedia(networkTweet.entities.media), networkTweet.text,
+        mapUser(networkTweet.user), mapUrls(networkTweet.entities.urls));
   }
 
   private User mapUser(TwitterUser twitterUser) {
     if(twitterUser == null) return null;
 
-    User user = new User();
-
-    user.setDescription(twitterUser.description);
-    user.setFollowersCount(twitterUser.followers_count);
-    user.setFollowing(twitterUser.following);
-    user.setFriendsCount(twitterUser.friends_count);
-    user.setIsVerified(twitterUser.verified);
-    user.setLocation(twitterUser.location);
-    user.setName(twitterUser.name);
-    user.setProfileImage(twitterUser.profile_image_url);
-    user.setScreenName(twitterUser.screen_name);
-    user.setUrl(twitterUser.url);
-    user.setStatusesCount(twitterUser.statuses_count);
-
-    return user;
+    return new User(twitterUser.name, twitterUser.screen_name, twitterUser.location, twitterUser.description,
+        twitterUser.url, twitterUser.followers_count, twitterUser.friends_count,
+        twitterUser.verified, twitterUser.statuses_count, twitterUser.profile_image_url, twitterUser.following);
   }
 
   private List<Url> mapUrls(List<TwitterUrl> urls) {
@@ -50,11 +31,7 @@ public class NetworkMapper {
     ArrayList<Url> mappedUrls = new ArrayList<>();
 
     for(TwitterUrl url: urls){
-      Url beakUrl = new Url();
-      beakUrl.setUrl(url.url);
-      beakUrl.setDisplayUrl(url.display_url);
-
-      mappedUrls.add(beakUrl);
+      mappedUrls.add(new Url(url.url, url.display_url));
     }
 
     return mappedUrls;
@@ -66,11 +43,7 @@ public class NetworkMapper {
     ArrayList<Media> beakMedia = new ArrayList<>();
 
     for(TwitterMedia mediaElement: mediaList){
-      Media media = new Media();
-      media.setUrl(mediaElement.url);
-      media.setDisplayUrl(mediaElement.display_url);
-
-      beakMedia.add(media);
+      beakMedia.add(new Media(mediaElement.url, mediaElement.display_url));
     }
 
     return beakMedia;

@@ -4,38 +4,37 @@ import com.squareup.okhttp.ResponseBody;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import net.byteabyte.beak.domain.login.verify_token.VerifyTokenClient;
 import net.byteabyte.beak.domain.login.verify_token.VerifyTokenClientException;
 import net.byteabyte.beak.domain.login.verify_token.VerifyTokenClientInput;
 import net.byteabyte.beak.domain.login.verify_token.VerifyTokenClientResponse;
 import net.byteabyte.beak.domain.oauth.OauthKeys;
 import net.byteabyte.beak.network.common.OAuthClientParameters;
-import net.byteabyte.beak.network.common.OAuthHttpClient;
+import net.byteabyte.beak.network.common.OAuthRetrofitClient;
 import net.byteabyte.beak.network.common.TwitterService;
 import retrofit.Response;
-import retrofit.Retrofit;
 
-public class VerifyTokenClient implements
-    net.byteabyte.beak.domain.login.verify_token.VerifyTokenClient {
+public class VerifyTokenClientImp extends OAuthRetrofitClient implements VerifyTokenClient {
 
   @Override
   public VerifyTokenClientResponse verifyToken(VerifyTokenClientInput verifyTokenClientInput)
       throws VerifyTokenClientException {
-    OAuthClientParameters
-        params = new OAuthClientParameters(verifyTokenClientInput.getConsumerKey(), verifyTokenClientInput.getConsumerSecret(), verifyTokenClientInput.getOauthRequestToken());
-
-    Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("https://api.twitter.com")
-        .client(new OAuthHttpClient(params))
-        .build();
-
-    TwitterService service = retrofit.create(TwitterService.class);
 
     try {
-      return buildOutputResponse(
-          service.verifyLoginRequestToken(verifyTokenClientInput.getOauthVerifier()).execute());
+      Response<ResponseBody> twitterResponse = buildTwitterService(verifyTokenClientInput).
+          verifyLoginRequestToken(verifyTokenClientInput.getOauthVerifier()).execute();
+
+      return buildOutputResponse(twitterResponse);
     }catch (IOException | NullPointerException e){
       throw new VerifyTokenClientException(e);
     }
+  }
+
+  private TwitterService buildTwitterService(VerifyTokenClientInput verifyTokenClientInput){
+    OAuthClientParameters
+        params = new OAuthClientParameters(verifyTokenClientInput.getConsumerKey(), verifyTokenClientInput.getConsumerSecret(), verifyTokenClientInput.getOauthRequestToken());
+
+    return buildOauthRetrofitClient(params).create(TwitterService.class);
   }
 
   private VerifyTokenClientResponse buildOutputResponse(Response<ResponseBody> response)

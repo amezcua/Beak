@@ -17,8 +17,8 @@ import net.byteabyte.beak.domain.Twitter;
 import net.byteabyte.beak.domain.login.request_token.GetLoginRequestTokenAction;
 import net.byteabyte.beak.domain.login.verify_token.VerifyTokenAction;
 import net.byteabyte.beak.domain.oauth.OauthKeys;
-import net.byteabyte.beak.login.request_token.GetLoginTokenClient;
-import net.byteabyte.beak.login.verify_token.VerifyTokenClient;
+import net.byteabyte.beak.login.request_token.RequestTokenClientImp;
+import net.byteabyte.beak.login.verify_token.VerifyTokenClientImp;
 import net.byteabyte.beak.presentation.login.LoginPresenter;
 import net.byteabyte.beak.presentation.login.LoginView;
 
@@ -43,8 +43,8 @@ public class LoginActivity extends BeakActivityBase implements LoginView {
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     presenter = new LoginPresenter(new UIThreadOutput(),
-        new GetLoginRequestTokenAction(new GetLoginTokenClient()),
-        new VerifyTokenAction(new VerifyTokenClient()),
+        new GetLoginRequestTokenAction(new RequestTokenClientImp()),
+        new VerifyTokenAction(new VerifyTokenClientImp()),
         BuildConfig.twitterConsumerKey,
         BuildConfig.twitterConsumerSecret);
     presenter.attachView(this);
