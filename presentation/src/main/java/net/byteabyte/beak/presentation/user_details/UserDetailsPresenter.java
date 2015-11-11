@@ -1,10 +1,10 @@
 package net.byteabyte.beak.presentation.user_details;
 
 import net.byteabyte.beak.domain.models.User;
-import net.byteabyte.beak.presentation.OutputThread;
-import net.byteabyte.beak.presentation.Presenter;
+import net.byteabyte.beak.presentation.common.OutputThread;
+import net.byteabyte.beak.presentation.common.Presenter;
 
-public class UserDetailsPresenter extends Presenter<UserDetailsView> {
+public class UserDetailsPresenter extends Presenter<UserDetailsView>{
 
   private User user;
 

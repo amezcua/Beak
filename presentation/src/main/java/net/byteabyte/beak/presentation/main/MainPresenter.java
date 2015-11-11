@@ -4,32 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 import net.byteabyte.beak.domain.StringUtils;
 import net.byteabyte.beak.domain.home_timeline.GetHomeTimelineAction;
+import net.byteabyte.beak.domain.home_timeline.GetHomeTimelineClient;
 import net.byteabyte.beak.domain.home_timeline.GetHomeTimelineException;
 import net.byteabyte.beak.domain.home_timeline.GetHomeTimelineInput;
 import net.byteabyte.beak.domain.home_timeline.GetHomeTimelineResponse;
 import net.byteabyte.beak.domain.models.Tweet;
 import net.byteabyte.beak.domain.models.User;
-import net.byteabyte.beak.presentation.OutputThread;
-import net.byteabyte.beak.presentation.Presenter;
+import net.byteabyte.beak.presentation.common.BackgroundTask;
+import net.byteabyte.beak.presentation.common.OutputThread;
+import net.byteabyte.beak.presentation.common.Presenter;
 
 public class MainPresenter extends Presenter<MainView> {
 
+  private final GetHomeTimelineClient homeTimelineClient;
   private final String consumerKey;
   private final String consumerSecret;
-  private final GetHomeTimelineAction getHomeTimelineAction;
 
   private List<Tweet> timeline = new ArrayList<>();
 
   private String oauthToken;
   private String oauthSecret;
 
-  public MainPresenter(OutputThread outputThread, String consumerKey, String consumerSecret, GetHomeTimelineAction action) {
+  public MainPresenter(OutputThread outputThread, GetHomeTimelineClient homeTimelineClient,
+      String twitterConsumerKey, String twitterConsumerSecret) {
     super(outputThread);
 
-    this.consumerKey = consumerKey;
-    this.consumerSecret = consumerSecret;
-
-    this.getHomeTimelineAction = action;
+    this.homeTimelineClient = homeTimelineClient;
+    this.consumerKey = twitterConsumerKey;
+    this.consumerSecret = twitterConsumerSecret;
   }
 
   public void onLoginClicked() {
@@ -83,26 +85,36 @@ public class MainPresenter extends Presenter<MainView> {
     }
   }
 
+  @BackgroundTask
   private void loadHomeTimeline(final String maxId) {
-    runOnBackgroundThread(new Runnable() {
-      @Override public void run() {
-        GetHomeTimelineInput input =
-            new GetHomeTimelineInput(consumerKey, consumerSecret, oauthToken, oauthSecret, maxId);
-        try {
-          getHomeTimelineAction.setRequestData(input);
-          GetHomeTimelineResponse response = getHomeTimelineAction.call();
+    GetHomeTimelineAction getHomeTimelineAction = new GetHomeTimelineAction(homeTimelineClient);
 
-          List<Tweet> newTimeline = response.getTimeline();
+    try {
+      getHomeTimelineAction.setRequestData(new GetHomeTimelineInput(consumerKey, consumerSecret, oauthToken, oauthSecret, maxId));
+      GetHomeTimelineResponse response = getHomeTimelineAction.call();
 
-          timeline.addAll(newTimeline);
-          getOutputThread().execute(new OnGetTimelineSuccess(timeline, maxId == null));
-          getOutputThread().execute(new OnNewTimelineAvailable(newTimeline));
-        } catch (GetHomeTimelineException e) {
-          getOutputThread().execute(new OnGetTimelineError());
-        }
-      }
-    });
+      List<Tweet> newTimeline = response.getTimeline();
+
+      timeline.addAll(newTimeline);
+      onTimelineSuccess(maxId, timeline, newTimeline);
+    } catch (GetHomeTimelineException e) {
+      onTimelineError();
+    }
   }
+
+  public void onTimelineSuccess(String maxId, List<Tweet> timeline, List<Tweet> newTimeline){
+    getView().hideLogin();
+    getView().hideLoading();
+    getView().displayTimeline(timeline, maxId == null);
+
+    getView().displayNewTimelineInformation(newTimeline.size());
+  }
+
+  public void onTimelineError(){
+    getView().hideLoading();
+    getView().displayTimelineLoadError();
+  }
+
 
   public void onDisplayUserDetails(User user) {
     getView().navigateToUserDetails(user);
@@ -110,43 +122,5 @@ public class MainPresenter extends Presenter<MainView> {
 
   public void onPostUpdateClicked() {
     getView().navigateToPostStatusUpdate(oauthToken, oauthSecret);
-  }
-
-  private class OnGetTimelineSuccess implements Runnable{
-
-    private final List<Tweet> timeline;
-    private final boolean clearCurrent;
-
-    public OnGetTimelineSuccess(List<Tweet> timeline, boolean clearCurrent){
-      this.timeline = timeline;
-      this.clearCurrent = clearCurrent;
-    }
-
-    @Override public void run() {
-      getView().hideLogin();
-      getView().hideLoading();
-      getView().displayTimeline(timeline, clearCurrent);
-    }
-  }
-
-  private class OnNewTimelineAvailable implements  Runnable{
-
-    private final List<Tweet> timeline;
-
-    public OnNewTimelineAvailable(List<Tweet> timeline){
-      this.timeline = timeline;
-    }
-
-    @Override public void run() {
-      getView().hideLoading();
-      getView().displayNewTimelineInformation(this.timeline.size());
-    }
-  }
-
-  private class OnGetTimelineError implements Runnable{
-    @Override public void run() {
-      getView().hideLoading();
-      getView().displayTimelineLoadError();
-    }
   }
 }

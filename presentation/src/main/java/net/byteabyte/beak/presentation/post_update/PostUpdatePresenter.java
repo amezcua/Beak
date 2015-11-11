@@ -1,12 +1,11 @@
 package net.byteabyte.beak.presentation.post_update;
 
-import net.byteabyte.beak.domain.models.Tweet;
 import net.byteabyte.beak.domain.post_update.PostUpdateAction;
 import net.byteabyte.beak.domain.post_update.PostUpdateException;
 import net.byteabyte.beak.domain.post_update.PostUpdateInput;
-import net.byteabyte.beak.domain.post_update.PostUpdateResponse;
-import net.byteabyte.beak.presentation.OutputThread;
-import net.byteabyte.beak.presentation.Presenter;
+import net.byteabyte.beak.presentation.common.BackgroundTask;
+import net.byteabyte.beak.presentation.common.OutputThread;
+import net.byteabyte.beak.presentation.common.Presenter;
 
 public class PostUpdatePresenter extends Presenter<PostUpdateView> {
 
@@ -25,37 +24,15 @@ public class PostUpdatePresenter extends Presenter<PostUpdateView> {
     this.oauthSecret = oauthSecret;
   }
 
+  @BackgroundTask
   public void postStatusUpdate(final String statusUpdate) {
-
-    runOnBackgroundThread(new Runnable() {
-      @Override public void run() {
-        try {
-          PostUpdateInput input = new PostUpdateInput(consumerKey, consumerSecret, oauthToken, oauthSecret, statusUpdate);
-          action.setRequestData(input);
-          PostUpdateResponse response = action.call();
-          getOutputThread().execute(new OnPostUpdateSuccess(response.getTweet()));
-        } catch (PostUpdateException e) {
-          getOutputThread().execute(new OnPostUpdateError());
-        }
+      try {
+        PostUpdateInput input = new PostUpdateInput(consumerKey, consumerSecret, oauthToken, oauthSecret, statusUpdate);
+        action.setRequestData(input);
+        action.call();
+        getView().onStatusPosted();
+      } catch (PostUpdateException e) {
+        getView().onStatusEmptyError();
       }
-    });
-  }
-
-  private class OnPostUpdateSuccess implements Runnable{
-    private final Tweet tweet;
-
-    public OnPostUpdateSuccess(Tweet tweet){
-      this.tweet = tweet;
-    }
-
-    @Override public void run() {
-      getView().onStatusPosted();
-    }
-  }
-
-  private class OnPostUpdateError implements Runnable{
-    @Override public void run() {
-      getView().onStatusEmptyError();
-    }
   }
 }
