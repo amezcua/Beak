@@ -56,8 +56,7 @@ public class PostUpdateActionTest {
 
     PostUpdateAction action = new PostUpdateAction(new PostUpdateClient() {
       @Override public Tweet postUpdate(PostUpdateInput input1) {
-        Tweet createdTweet = new Tweet();
-        createdTweet.setText(input.getStatus());
+        Tweet createdTweet = new Tweet(null, null, null, input.getStatus(), null, null);
         PostUpdateResponse response = new PostUpdateResponse(createdTweet);
         return response.getTweet();
       }

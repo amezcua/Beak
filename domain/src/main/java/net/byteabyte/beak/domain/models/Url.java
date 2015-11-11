@@ -1,22 +1,19 @@
 package net.byteabyte.beak.domain.models;
 
 public class Url {
-  private String url;
-  private String displayUrl;
+  private final String url;
+  private final String displayUrl;
+
+  public Url(String url, String displayUrl) {
+    this.url = url;
+    this.displayUrl = displayUrl;
+  }
 
   public String getUrl() {
     return this.url;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
   public String getUrlDisplay() {
     return this.displayUrl;
-  }
-
-  public void setDisplayUrl(String displayUrl) {
-    this.displayUrl = displayUrl;
   }
 }
