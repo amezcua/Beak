@@ -19,7 +19,6 @@ import java.util.List;
 import net.byteabyte.beak.BuildConfig;
 import net.byteabyte.beak.R;
 import net.byteabyte.beak.UIThreadOutput;
-import net.byteabyte.beak.domain.home_timeline.GetHomeTimelineAction;
 import net.byteabyte.beak.domain.models.Tweet;
 import net.byteabyte.beak.domain.models.User;
 import net.byteabyte.beak.domain.oauth.OauthKeys;
@@ -52,10 +51,7 @@ public class BeakActivity extends AppCompatActivity implements MainView, SwipeRe
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    presenter = new MainPresenter(new UIThreadOutput(),
-        BuildConfig.twitterConsumerKey,
-        BuildConfig.twitterConsumerSecret,
-        new GetHomeTimelineAction((new HomeTimelineClient())));
+    presenter = new MainPresenter(new UIThreadOutput(), new HomeTimelineClient(), BuildConfig.twitterConsumerKey, BuildConfig.twitterConsumerSecret);
 
     setContentView(R.layout.activity_beak);
     ButterKnife.bind(this);
@@ -73,7 +69,6 @@ public class BeakActivity extends AppCompatActivity implements MainView, SwipeRe
 
     timelineAdapter = new HomeTimelineAdapter(this, new TweetTimelineListener(){
       @Override public void onDisplayUserDetails(TweetViewHolder tweetViewHolder, User user) {
-
         pairedViews = buildPairedElements(tweetViewHolder);
         presenter.onDisplayUserDetails(user);
       }
@@ -115,8 +110,7 @@ public class BeakActivity extends AppCompatActivity implements MainView, SwipeRe
       }
     }else if(requestCode == PostUpdateActivity.REQUEST_CODE && resultCode == RESULT_OK){
       presenter.onRefresh();
-    }
-    else {
+    }else {
       super.onActivityResult(requestCode, resultCode, data);
     }
   }
@@ -135,7 +129,8 @@ public class BeakActivity extends AppCompatActivity implements MainView, SwipeRe
     });
   }
 
-  private Pair[] buildPairedElements(TweetViewHolder tweetViewHolder) {
+  @SuppressWarnings("unchecked")
+  private Pair<View, String>[] buildPairedElements(TweetViewHolder tweetViewHolder) {
     return new Pair[] {
         Pair.create(toolbar, getString(R.string.transition_toolbar)),
         Pair.create(tweetViewHolder.userImage, getString(R.string.transition_user_image)),
