@@ -1,6 +1,7 @@
 package net.byteabyte.beak.test.domain.home_timeline;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import net.byteabyte.beak.domain.home_timeline.GetHomeTimelineAction;
 import net.byteabyte.beak.domain.home_timeline.GetHomeTimelineClient;
@@ -30,10 +31,10 @@ public class GetHomeTimelineActionTest {
     action.call();
   }
 
-  @Test public void actionReturnsValidResponse() throws GetHomeTimelineException {
+  @Test public void firstPageReturnsFullTweetList() throws GetHomeTimelineException {
     final List<Tweet> expectedResponse = new ArrayList<>();
 
-    GetHomeTimelineInput input = new GetHomeTimelineInput("key", "secret", "token", "tokensecret", "0");
+    GetHomeTimelineInput input = new GetHomeTimelineInput("key", "secret", "token", "tokensecret", null);
 
     GetHomeTimelineClient client = new GetHomeTimelineClient() {
       @Override public List<Tweet> getHomeTimeline(GetHomeTimelineInput input)
@@ -48,5 +49,50 @@ public class GetHomeTimelineActionTest {
     GetHomeTimelineResponse response = action.call();
 
     assertEquals(expectedResponse, response.getTimeline());
+  }
+
+  @Test public void followingPagesReturnEmptyListIfTwitterReturnsSingleItem()
+      throws GetHomeTimelineException {
+    final List<Tweet> twitterResponse = new ArrayList<>();
+    twitterResponse.add(new Tweet(new Date(), "1234", null, "Test text", null, null));
+
+    GetHomeTimelineInput input = new GetHomeTimelineInput("key", "secret", "token", "tokensecret", "1234");
+
+    GetHomeTimelineClient client = new GetHomeTimelineClient() {
+      @Override public List<Tweet> getHomeTimeline(GetHomeTimelineInput input)
+          throws GetHomeTimelineException {
+        return twitterResponse;
+      }
+    };
+
+    GetHomeTimelineAction action = new GetHomeTimelineAction(client);
+    action.setRequestData(input);
+
+    GetHomeTimelineResponse response = action.call();
+
+    assertEquals(0, response.getTimeline().size());
+  }
+
+  @Test public void followingPagesExcludeMatchingMaxId() throws GetHomeTimelineException {
+    final List<Tweet> twitterResponse = new ArrayList<>();
+    twitterResponse.add(new Tweet(new Date(), "1234", null, "Test text 1234", null, null));
+    twitterResponse.add(new Tweet(new Date(), "1235", null, "Test text 1235", null, null));
+
+    GetHomeTimelineInput input = new GetHomeTimelineInput("key", "secret", "token", "tokensecret", "1234");
+
+    GetHomeTimelineClient client = new GetHomeTimelineClient() {
+      @Override public List<Tweet> getHomeTimeline(GetHomeTimelineInput input)
+          throws GetHomeTimelineException {
+        return twitterResponse;
+      }
+    };
+
+    GetHomeTimelineAction action = new GetHomeTimelineAction(client);
+    action.setRequestData(input);
+
+    GetHomeTimelineResponse response = action.call();
+
+    assertEquals(1, response.getTimeline().size());
+    assertEquals("1235", response.getTimeline().get(0).getId());
   }
 }

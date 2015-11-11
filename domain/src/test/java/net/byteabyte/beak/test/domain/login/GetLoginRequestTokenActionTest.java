@@ -32,7 +32,7 @@ public class GetLoginRequestTokenActionTest {
     action.call();
   }
 
-  @Test public void actionReturnsValidResponse() throws RequestTokenClientException {
+  @Test public void actionReturnsTokens() throws RequestTokenClientException {
     final RequestTokenClientResponse expectedResponse = new RequestTokenClientResponse("MOCK_TOKEN", "OAUTH_SECRET", true);
 
     RequestTokenClient mockRequestTokenClient = new RequestTokenClient() {

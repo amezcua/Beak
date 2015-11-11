@@ -30,7 +30,7 @@ public class GetHomeTimelineAction implements
     }else if(getHomeTimelineResponse.size() <= 1) {
       return new GetHomeTimelineResponse(new ArrayList<Tweet>());
     }else{
-      return new GetHomeTimelineResponse(getHomeTimelineResponse.subList(1, getHomeTimelineResponse.size() - 1));
+      return new GetHomeTimelineResponse(getHomeTimelineResponse.subList(1, getHomeTimelineResponse.size()));
     }
   }
 }
